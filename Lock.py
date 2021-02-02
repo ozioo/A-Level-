@@ -1,14 +1,3 @@
-"""
- Pygame base template for opening a window
- 
- Sample Python/Pygame Programs
- Simpson College Computer Science
- http://programarcadegames.com/
- http://simpson.edu/computer-science/
- 
- Explanation video: http://youtu.be/vRB_983kUMc
-"""
- 
 import os
 import random
 import pygame
@@ -81,7 +70,7 @@ pygame.init()
 size = (700, 500)
 screen = pygame.display.set_mode(size)
  
-pygame.display.set_caption("press left arrow for it to lose track")
+pygame.display.set_caption("press enter to lock the target")
  
 # Loop until the user clicks the close button.
 done = False
@@ -111,9 +100,11 @@ while not done:
 
             elif event.key == pygame.K_DOWN:
                 cursor.rect.y += 20
-            elif event.key == pygame.K_RETURN
+            elif event.key == pygame.K_RETURN:
                 if pygame.sprite.collide_rect(cursor,enemy) == True:
                     enemy.change_state(LOCK)
+                else:
+                    enemy.change_state(UNLOCK)
 
                 
 
