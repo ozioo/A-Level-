@@ -1,65 +1,97 @@
-import math
+import sys
 import pygame
-
-UNLOCK = pygame.image.load('pixilart-drawing.png')
-
-LOCK = pygame.image.load('pixil-frame-0.png')
-
-CURSOR = pygame.image.load('pixil-frame-0 (1).png')
-
-INVIS = pygame.image.load('pixil-frame-0 (2).png')
-
-class SpriteObject(pygame.sprite.Sprite):
-    def __init__(self, x, y, image):
-        super().__init__()
-        self.image = image
-        self.rect = self.image.get_rect(center = (x, y))
-        self.mask = pygame.mask.from_surface(self.image)
-    def update(self):
-        self.rect.center = pygame.mouse.get_pos()
-    def change_state(self, image):
-        self.image = image
-        self.mask = pygame.mask.from_surface(self.image)
+import math
+from pygame.locals import *
+ 
+# Define some colors
+BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
+GREEN = (0, 255, 0)
+RED = (255, 0, 0)
+(x,y) = (800,800)   
+deg = 0             
+pygame.init()       
+pygame.display.set_mode((1000, 1000), 0, 32) 
+screen = pygame.display.get_surface()
+pygame.init()
 
 class Line(pygame.sprite.Sprite):
     def __init__(self, x, y):
         super().__init__()
-        self.image = pygame.Surface((200, 200))
+        self.image = pygame.Surface((800, 800))
         self.image.set_colorkey((0, 0, 0))
-        self.rect = self.image.get_rect(center = (x, y))
+        self.rect = self.image.get_rect(center = (400, 400))
         self.angle = 0
     def update(self):
-        vec = round(math.cos(self.angle * math.pi / 180) * 100), round(math.sin(self.angle * math.pi / 180) * 100)
-        self.angle = (self.angle + 3) % 360
-        self.image.fill(0)
-        pygame.draw.line(self.image, (255, 255, 0), (100 - vec[0], 100 - vec[1]), (100 + vec[0], 100 + vec[1]), 5)
+        self.angle +=2
+        if self.angle >=360:
+            deg=0
+        for i in range(1, 10):
+            dx = x/2 + x/2 * math.cos(math.radians(self.angle-.1*i))
+            dy = y/2 + x/2 * math.sin(math.radians(self.angle-.1*i))
+            f = i*.1
+            pygame.draw.aaline(screen, (0, int(255/(1+f)), 0), (int(x/2), int(y/2)), (dx, dy),5)
+
         self.mask = pygame.mask.from_surface(self.image)
-        
-pygame.init()
-window = pygame.display.set_mode((500, 500))
+ 
+# Set the width and height of the screen [width, height]
+
+ 
+pygame.display.set_caption("Missile Command Redux")
+# Loop until the user clicks the close button.
+done = False
+ 
+# Used to manage how fast the screen updates
 clock = pygame.time.Clock()
 
-sprite_image = LOCK.convert_alpha()
-moving_object = SpriteObject(0, 0, sprite_image)
-line_object = Line(*window.get_rect().center)
-all_sprites = pygame.sprite.Group([moving_object, line_object])
-red = 0
-
-run = True
-while run:
-    clock.tick(60)
+all_sprites_list = pygame.sprite.Group()
+radar =Line(400,400)
+all_sprites_list.add(radar)
+# -------- Main Program Loop -----------
+while not done:
+    # --- Main event loop
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            run = False
+            done = True
  
-    all_sprites.update()
+    # --- Game logic should go here
+    deg += 2
+    if deg >= 360:  
+        deg = 0
 
-    if pygame.sprite.collide_mask(moving_object, line_object):
-        moving_object.change_state(pygame.image.load('pixilart-drawing.png'))
+    pygame.draw.circle(screen, (102, 255, 102), (int(x/2), int(y/2)), int(x/2), 1)
+    pygame.draw.circle(screen, (102, 255, 102), (int(x/2), int(y/2)), int(x/4), 1)
+    pygame.draw.line(screen, (76, 82, 76), (250, 190), (200, 55))
+    pygame.draw.line(screen, (76, 82, 76), (300, 200), (250, 190))
+    pygame.draw.line(screen, (76, 82, 76), (350, 300), (300, 200))
+    pygame.draw.line(screen, (76, 82, 76), (350, 300), (785, 300))
+    pygame.draw.line(screen, (76, 82, 76), (350, 300), (300, 600))
+    pygame.draw.line(screen, (76, 82, 76), (300, 600), (350, 675))
+    pygame.draw.line(screen, (76, 82, 76), (370, 796), (350, 675))
 
-    window.fill((0, 0, 0))
-    all_sprites.draw(window)
+        #pygame.draw.line(screen, (0, 200, 0), (int(x/2), 0), (int(x/2), y))
+
+
+    all_sprites_list.update()
+    pygame.display.update()     
+    pygame.time.wait(30)        
+    screen.fill((0, 0, 0, 0))    
+    # --- Screen-clearing code goes here
+ 
+    # Here, we clear the screen to white. Don't put other drawing commands
+    # above this, or they will be erased with this command.
+    all_sprites_list.draw(screen)
+    # If you want a background image, replace this clear with blit'ing the
+    # background image.
+
+ 
+    # --- Drawing code should go here
+ 
+    # --- Go ahead and update the screen with what we've drawn.
     pygame.display.flip()
+ 
+    # --- Limit to 60 frames per second
 
+ 
+# Close the window and quit.
 pygame.quit()
-exit()
