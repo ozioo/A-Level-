@@ -2,6 +2,7 @@ import sys
 import pygame
 import math
 import random
+from time import sleep
 from pygame.locals import *
 
 
@@ -18,7 +19,8 @@ WHITE = (255, 255, 255)
 GREEN = (0, 255, 0)
 RED = (255, 0, 0)
 (x,y) = (800,800)   
-deg = 0             
+deg = 0            
+enemy_count= 0 
 pygame.init()       
 pygame.display.set_mode((1000, 1000), 0, 32) 
 screen = pygame.display.get_surface()
@@ -52,6 +54,7 @@ class Enemy(pygame.sprite.Sprite):
         self.mask = pygame.mask.from_surface(self.image)
         self.y_d = y_d
         self.x_d = x_d
+        self.lock_time = 0
         # Make our top-left corner the passed-in location.
         self.rect = self.image.get_rect()
         self.rect.y = y_pos
@@ -98,42 +101,52 @@ def MAP():
     
 def Enemy_Spawn(number):
     locations=[]
+    global enemy_count
     locations = random.sample(range(8),number)
     for i in range(number):
         if locations[i]==1:
             enemy=Enemy(UNLOCK,400,100,0,1)
             all_sprites_list.add(enemy)
             enemy_list.add(enemy)
+            enemy_count =+ 1
         elif locations[i] == 2:
             enemy=Enemy(UNLOCK,150,100,1,1)
             all_sprites_list.add(enemy)
             enemy_list.add(enemy)
+            enemy_count =+ 1
         elif locations[i] == 3:
             enemy=Enemy(UNLOCK,100,400,1,0)
             all_sprites_list.add(enemy)
             enemy_list.add(enemy)
+            enemy_count =+ 1
         elif locations[i] == 4:
             enemy=Enemy(UNLOCK,150,600,1,-1)
             all_sprites_list.add(enemy)
             enemy_list.add(enemy)
+            enemy_count =+ 1
         elif locations[i] == 5:
             enemy=Enemy(UNLOCK,400,700,0,-1)
             all_sprites_list.add(enemy)
             enemy_list.add(enemy)
+            enemy_count =+ 1
         elif locations[i] == 6:
             enemy=Enemy(UNLOCK,600,600,-1,-1)
             all_sprites_list.add(enemy)
+            enemy_count =+ 1
             enemy_list.add(enemy)
         elif locations[i] == 7:
             enemy=Enemy(UNLOCK,700,400,-1,0)
             all_sprites_list.add(enemy)
             enemy_list.add(enemy)
+            enemy_count =+ 1
         elif locations[i] == 8:
             enemy=Enemy(UNLOCK,650,150,-1,1)
             all_sprites_list.add(enemy)
             enemy_list.add(enemy)
-    locations=[]       
-
+            enemy_count =+ 1
+    locations=[]
+          
+current_time=0
 # Set the width and height of the screen [width, height]
 
 #def radar_detection
@@ -152,7 +165,7 @@ clock = pygame.time.Clock()
 radar =Line(400,400)
 cursor =Cursor(CURSOR,372,375)
 
-Enemy_Spawn(3)
+Enemy_Spawn(5)
 
 all_sprites_list.add(radar)
 all_sprites_list.add(cursor)
@@ -177,8 +190,22 @@ while not done:
  
     # --- Game logic should go here
     MAP()
-        #pygame.draw.line(screen, (0, 200, 0), (int(x/2), 0), (int(x/2), y))
 
+    current_time= pygame.time.get_ticks()
+        #pygame.draw.line(screen, (0, 200, 0), (int(x/2), 0), (int(x/2), y))
+    for enemy in enemy_list:
+
+        if pygame.sprite.collide_mask(enemy,radar):
+            enemy.change_state(LOCK)
+            enemy.lock_time = pygame.time.get_ticks()
+    for enemy in enemy_list:
+        if current_time - enemy.lock_time > 1500:
+            enemy.change_state(UNLOCK)
+
+
+            
+
+    
 
     all_sprites_list.update()
     pygame.display.update()     
