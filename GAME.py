@@ -68,7 +68,7 @@ class Line(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(center = (400, 400))
         self.angle = 0
     def update(self):
-        self.angle +=4
+        self.angle +=2
         if self.angle >=360:
             deg=0
         for i in range(1, 10):
@@ -85,6 +85,20 @@ class Line(pygame.sprite.Sprite):
 #def lock
 pygame.display.set_caption("Missile Command Redux")
 # Loop until the user clicks the close button.
+
+def MAP():
+    pygame.draw.circle(screen, (102, 255, 102), (int(x/2), int(y/2)), int(x/2), 1)
+    pygame.draw.circle(screen, (102, 255, 102), (int(x/2), int(y/2)), int(x/4), 1)
+    pygame.draw.line(screen, (76, 82, 76), (250, 190), (200, 55))
+    pygame.draw.line(screen, (76, 82, 76), (300, 200), (250, 190))
+    pygame.draw.line(screen, (76, 82, 76), (350, 300), (300, 200))
+    pygame.draw.line(screen, (76, 82, 76), (350, 300), (785, 300))
+    pygame.draw.line(screen, (76, 82, 76), (340, 360), (0, 400))
+    pygame.draw.line(screen, (76, 82, 76), (350, 300), (300, 600))
+    pygame.draw.line(screen, (76, 82, 76), (300, 600), (350, 675))
+    pygame.draw.line(screen, (76, 82, 76), (370, 796), (350, 675))
+    
+
 done = False
  
 # Used to manage how fast the screen updates
@@ -116,26 +130,17 @@ while not done:
                 cursor.rect.y += 20
  
     # --- Game logic should go here
-    deg += 2
-    if deg >= 360:  
-        deg = 0
+    MAP()
 
-    pygame.draw.circle(screen, (102, 255, 102), (int(x/2), int(y/2)), int(x/2), 1)
-    pygame.draw.circle(screen, (102, 255, 102), (int(x/2), int(y/2)), int(x/4), 1)
-    pygame.draw.line(screen, (76, 82, 76), (250, 190), (200, 55))
-    pygame.draw.line(screen, (76, 82, 76), (300, 200), (250, 190))
-    pygame.draw.line(screen, (76, 82, 76), (350, 300), (300, 200))
-    pygame.draw.line(screen, (76, 82, 76), (350, 300), (785, 300))
-    pygame.draw.line(screen, (76, 82, 76), (350, 300), (300, 600))
-    pygame.draw.line(screen, (76, 82, 76), (300, 600), (350, 675))
-    pygame.draw.line(screen, (76, 82, 76), (370, 796), (350, 675))
+
+    
 
         #pygame.draw.line(screen, (0, 200, 0), (int(x/2), 0), (int(x/2), y))
 
 
     all_sprites_list.update()
     pygame.display.update()     
-    clock.tick(30)        
+    clock.tick(60)        
     screen.fill((0, 0, 0, 0))    
     # --- Screen-clearing code goes here
  
