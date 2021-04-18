@@ -23,11 +23,23 @@ pygame.display.set_mode((1000, 1000), 0, 32)
 screen = pygame.display.get_surface()
 pygame.init()
 
-#class Cursor(pygame.sprite.Sprite):
-#   def __init__(self,  x, y):
-#
-#    def update(self):
-#
+class Cursor(pygame.sprite.Sprite):
+    """ The class is the player-controlled sprite. """
+ 
+    def __init__(self, image,x ,y):
+        """Constructor function"""
+        # Call the parent's constructor
+        super().__init__()
+ 
+        # Set height, width
+        self.image = pygame.Surface([60, 60])
+        self.rect = self.image.get_rect()
+        self.rect.y = y
+        self.rect.x = x
+        self.change_x = 0
+        self.change_y = 0
+        self.image=image
+
 class Enemy(pygame.sprite.Sprite):
     def __init__(self, image, x_pos, y_pos):
         super().__init__()
@@ -80,8 +92,10 @@ clock = pygame.time.Clock()
 
 all_sprites_list = pygame.sprite.Group()
 radar =Line(400,400)
+cursor =Cursor(CURSOR,368,375)
 enemy = Enemy(UNLOCK,200,200)
 all_sprites_list.add(radar)
+all_sprites_list.add(cursor)
 all_sprites_list.add(enemy)
 # -------- Main Program Loop -----------
 while not done:
@@ -89,6 +103,17 @@ while not done:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             done = True
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_LEFT:
+                cursor.rect.x -= 10 
+            elif event.key == pygame.K_RIGHT:
+                cursor.rect.x += 10
+
+            elif event.key == pygame.K_UP:
+                cursor.rect.y -= 10
+
+            elif event.key == pygame.K_DOWN:
+                cursor.rect.y += 20
  
     # --- Game logic should go here
     deg += 2
