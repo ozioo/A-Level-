@@ -1,16 +1,17 @@
 import sys
 import pygame
 import math
+import random
 from pygame.locals import *
 
 
-UNLOCK = pygame.image.load('pixilart-drawing.png')
+UNLOCK = pygame.image.load('UNLOCK.png')
 
-LOCK = pygame.image.load('pixil-frame-0.png')
+LOCK = pygame.image.load('LOCK.png')
 
-CURSOR = pygame.image.load('pixil-frame-0 (1).png')
+CURSOR = pygame.image.load('CURSOR.png')
 
-INVIS = pygame.image.load('pixil-frame-0 (2).png')
+INVIS = pygame.image.load('INVIS.png')
 # Define some colors
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
@@ -23,6 +24,8 @@ pygame.display.set_mode((1000, 1000), 0, 32)
 screen = pygame.display.get_surface()
 pygame.init()
 
+all_sprites_list = pygame.sprite.Group()
+enemy_list = pygame.sprite.Group()
 class Cursor(pygame.sprite.Sprite):
     """ The class is the player-controlled sprite. """
  
@@ -32,7 +35,7 @@ class Cursor(pygame.sprite.Sprite):
         super().__init__()
  
         # Set height, width
-        self.image = pygame.Surface([60, 60])
+        self.image = pygame.Surface([40, 40])
         self.rect = self.image.get_rect()
         self.rect.y = y
         self.rect.x = x
@@ -41,12 +44,14 @@ class Cursor(pygame.sprite.Sprite):
         self.image=image
 
 class Enemy(pygame.sprite.Sprite):
-    def __init__(self, image, x_pos, y_pos):
+    def __init__(self, image, x_pos, y_pos,x_d,y_d):
         super().__init__()
         # Set height, width
-        self.image = pygame.Surface([40, 40])
+        self.image = pygame.Surface([20, 20])
         self.image= image
         self.mask = pygame.mask.from_surface(self.image)
+        self.y_d = y_d
+        self.x_d = x_d
         # Make our top-left corner the passed-in location.
         self.rect = self.image.get_rect()
         self.rect.y = y_pos
@@ -54,7 +59,9 @@ class Enemy(pygame.sprite.Sprite):
     def change_state(self, image):
         self.image = image
         self.mask = pygame.mask.from_surface(self.image)
-    #def update(self):
+    def update(self):
+        self.rect.x += self.x_d
+        self.rect.y += self.y_d
 
 
     
@@ -68,7 +75,7 @@ class Line(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(center = (400, 400))
         self.angle = 0
     def update(self):
-        self.angle +=2
+        self.angle +=4
         if self.angle >=360:
             deg=0
         for i in range(1, 10):
@@ -77,15 +84,6 @@ class Line(pygame.sprite.Sprite):
             f = i*.1
             pygame.draw.aaline(screen, (0, int(255/(1+f)), 0), (int(x/2), int(y/2)), (dx, dy),5)
         self.mask = pygame.mask.from_surface(self.image)
- 
-# Set the width and height of the screen [width, height]
-
-#def radar_detection
-
-#def lock
-pygame.display.set_caption("Missile Command Redux")
-# Loop until the user clicks the close button.
-
 def MAP():
     pygame.draw.circle(screen, (102, 255, 102), (int(x/2), int(y/2)), int(x/2), 1)
     pygame.draw.circle(screen, (102, 255, 102), (int(x/2), int(y/2)), int(x/4), 1)
@@ -98,19 +96,67 @@ def MAP():
     pygame.draw.line(screen, (76, 82, 76), (300, 600), (350, 675))
     pygame.draw.line(screen, (76, 82, 76), (370, 796), (350, 675))
     
+def Enemy_Spawn(number):
+    locations=[]
+    locations = random.sample(range(8),number)
+    for i in range(number):
+        if locations[i]==1:
+            enemy=Enemy(UNLOCK,400,100,0,1)
+            all_sprites_list.add(enemy)
+            enemy_list.add(enemy)
+        elif locations[i] == 2:
+            enemy=Enemy(UNLOCK,150,100,1,1)
+            all_sprites_list.add(enemy)
+            enemy_list.add(enemy)
+        elif locations[i] == 3:
+            enemy=Enemy(UNLOCK,100,400,1,0)
+            all_sprites_list.add(enemy)
+            enemy_list.add(enemy)
+        elif locations[i] == 4:
+            enemy=Enemy(UNLOCK,150,600,1,-1)
+            all_sprites_list.add(enemy)
+            enemy_list.add(enemy)
+        elif locations[i] == 5:
+            enemy=Enemy(UNLOCK,400,700,0,-1)
+            all_sprites_list.add(enemy)
+            enemy_list.add(enemy)
+        elif locations[i] == 6:
+            enemy=Enemy(UNLOCK,600,600,-1,-1)
+            all_sprites_list.add(enemy)
+            enemy_list.add(enemy)
+        elif locations[i] == 7:
+            enemy=Enemy(UNLOCK,700,400,-1,0)
+            all_sprites_list.add(enemy)
+            enemy_list.add(enemy)
+        elif locations[i] == 8:
+            enemy=Enemy(UNLOCK,650,150,-1,1)
+            all_sprites_list.add(enemy)
+            enemy_list.add(enemy)
+    locations=[]       
+
+# Set the width and height of the screen [width, height]
+
+#def radar_detection
+
+#def lock
+pygame.display.set_caption("Missile Command Redux")
+# Loop until the user clicks the close button.
+
 
 done = False
  
 # Used to manage how fast the screen updates
 clock = pygame.time.Clock()
 
-all_sprites_list = pygame.sprite.Group()
+
 radar =Line(400,400)
-cursor =Cursor(CURSOR,368,375)
-enemy = Enemy(UNLOCK,200,200)
+cursor =Cursor(CURSOR,372,375)
+
+Enemy_Spawn(3)
+
 all_sprites_list.add(radar)
 all_sprites_list.add(cursor)
-all_sprites_list.add(enemy)
+
 # -------- Main Program Loop -----------
 while not done:
     # --- Main event loop
@@ -131,10 +177,6 @@ while not done:
  
     # --- Game logic should go here
     MAP()
-
-
-    
-
         #pygame.draw.line(screen, (0, 200, 0), (int(x/2), 0), (int(x/2), y))
 
 
