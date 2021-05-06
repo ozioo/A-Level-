@@ -81,11 +81,12 @@ class Line(pygame.sprite.Sprite):
         self.angle +=4
         if self.angle >=360:
             deg=0
-        for i in range(1, 10):
-            dx = x/2 + x/2 * math.cos(math.radians(self.angle-.1*i))
-            dy = y/2 + x/2 * math.sin(math.radians(self.angle-.1*i))
-            f = i*.1
-            pygame.draw.aaline(screen, (0, int(255/(1+f)), 0), (int(x/2), int(y/2)), (dx, dy),5)
+
+        dx = x/2 + x/2 * math.cos(math.radians(self.angle-.1))
+        dy = y/2 + x/2 * math.sin(math.radians(self.angle-.1))
+        f = .1
+        self.image.fill(0)
+        pygame.draw.aaline(self.image, (0, int(255/(1+f)), 0), (int(x/2), int(y/2)), (dx, dy),5)
         self.mask = pygame.mask.from_surface(self.image)
 def MAP():
     pygame.draw.circle(screen, (102, 255, 102), (int(x/2), int(y/2)), int(x/2), 1)
@@ -193,17 +194,22 @@ while not done:
 
     current_time= pygame.time.get_ticks()
         #pygame.draw.line(screen, (0, 200, 0), (int(x/2), 0), (int(x/2), y))
-    for enemy in enemy_list:
+    #for enemy in enemy_list:
 
-        if pygame.sprite.collide_mask(enemy,radar):
-            enemy.change_state(LOCK)
-            enemy.lock_time = pygame.time.get_ticks()
-    for enemy in enemy_list:
-        if current_time - enemy.lock_time > 1500:
-            enemy.change_state(UNLOCK)
-
-
+        #if pygame.sprite.collide_mask(enemy,radar):
+            #enemy.change_state(LOCK)
+            #enemy.lock_time = pygame.time.get_ticks()
+    
+    #for enemy in enemy_list:
+        #if pygame.spritecollide_mask(enemy,radar):
             
+        
+        
+
+
+    for enemy in enemy_list:
+        if pygame.sprite.collide_mask(enemy, radar):
+            exit()         
 
     
 
