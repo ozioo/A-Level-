@@ -13,6 +13,9 @@ LOCK = pygame.image.load('LOCK.png')
 CURSOR = pygame.image.load('CURSOR.png')
 
 INVIS = pygame.image.load('INVIS.png')
+
+font = "NbpReadout-RBVA.ttf"
+
 # Define some colors
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
@@ -44,6 +47,8 @@ class Cursor(pygame.sprite.Sprite):
         self.change_x = 0
         self.change_y = 0
         self.image=image
+
+
 
 class Enemy(pygame.sprite.Sprite):
     def __init__(self, image, x_pos, y_pos,x_d,y_d):
@@ -99,7 +104,60 @@ def MAP():
     pygame.draw.line(screen, (76, 82, 76), (350, 300), (300, 600))
     pygame.draw.line(screen, (76, 82, 76), (300, 600), (350, 675))
     pygame.draw.line(screen, (76, 82, 76), (370, 796), (350, 675))
-    
+
+def text_format(message, textFont, textSize, textColor):
+    newFont=pygame.font.Font(textFont, textSize)
+    newText=newFont.render(message, 0, textColor)
+ 
+    return newText
+
+def main_menu():
+ 
+    menu=True
+    selected="start"
+ 
+    while menu:
+        for event in pygame.event.get():
+            if event.type==pygame.QUIT:
+                pygame.quit()
+                quit()
+            if event.type==pygame.KEYDOWN:
+                if event.key==pygame.K_UP:
+                    selected="start"
+                elif event.key==pygame.K_DOWN:
+                    selected="quit"
+                if event.key==pygame.K_RETURN:
+                    if selected=="start":
+                        menu = False
+                    if selected=="quit":
+                        pygame.quit()
+                        quit()
+ 
+        # Main Menu UI
+        screen.fill(BLACK)
+        title=text_format("Missile Command Redux", font, 50, GREEN)
+        if selected=="start":
+            text_start=text_format("START", font, 40, WHITE)
+        else:
+            text_start = text_format("START", font, 40, GREEN)
+
+        if selected=="quit":
+            text_quit=text_format("QUIT", font, 40, WHITE)
+        else:
+            text_quit = text_format("QUIT", font, 40, GREEN)
+ 
+        title_rect=title.get_rect()
+        start_rect=text_start.get_rect()
+        quit_rect=text_quit.get_rect()
+ 
+        # Main Menu Text
+        screen.blit(title, (1000/2 - (title_rect[2]/2), 80))
+        screen.blit(text_start, (1000/2 - (start_rect[2]/2), 300))
+        screen.blit(text_quit, (1000/2 - (quit_rect[2]/2), 360))
+        pygame.display.update()
+        clock.tick(60)
+
+
 def Enemy_Spawn(number):
     locations=[]
     global enemy_count
@@ -172,18 +230,18 @@ all_sprites_list.add(radar)
 all_sprites_list.add(cursor)
 
 # -------- Main Program Loop -----------
-black=(0,0,0)
-end_it=False
-while (end_it==False):
-    screen.fill(black)
-    myfont=pygame.font.SysFont("NBP Readout", 40)
-    nlabel=myfont.render("Welcome ", 1, (255, 0, 0))
-    for event in pygame.event.get():
-        if event.type==MOUSEBUTTONDOWN:
-            end_it=True
-    screen.blit(nlabel,(200,200))
-    pygame.display.flip()
-
+##black=(0,0,0)
+##end_it=False
+##while (end_it==False):
+##    screen.fill(black)
+##    myfont=pygame.font.SysFont("NBP Readout", 40)
+#    nlabel=myfont.render("Welcome ", 1, (255, 0, 0))
+#    for event in pygame.event.get():
+#        if event.type==MOUSEBUTTONDOWN:
+#            end_it=True
+#    screen.blit(nlabel,(200,200))
+#    pygame.display.flip()
+main_menu()
 
 while not done:
     # --- Main event loop
