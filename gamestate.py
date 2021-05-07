@@ -124,8 +124,10 @@ def main_menu():
             if event.type==pygame.KEYDOWN:
                 if event.key==pygame.K_UP:
                     selected="start"
-                elif event.key==pygame.K_DOWN:
+                elif event.key==pygame.K_RIGHT:
                     selected="quit"
+                elif event.key==pygame.K_LEFT:
+                    selected="Controls"
                 if event.key==pygame.K_RETURN:
                     if selected=="start":
                         menu = False
@@ -140,7 +142,10 @@ def main_menu():
             text_start=text_format("START", font, 40, WHITE)
         else:
             text_start = text_format("START", font, 40, GREEN)
-
+        if selected=="Controls":
+            text_controls=text_format("CONTROLS", font, 40, WHITE)
+        else:
+            text_controls = text_format("CONTROLS", font, 40, GREEN)
         if selected=="quit":
             text_quit=text_format("QUIT", font, 40, WHITE)
         else:
@@ -153,7 +158,8 @@ def main_menu():
         # Main Menu Text
         screen.blit(title, (1000/2 - (title_rect[2]/2), 80))
         screen.blit(text_start, (1000/2 - (start_rect[2]/2), 300))
-        screen.blit(text_quit, (1000/2 - (quit_rect[2]/2), 360))
+        screen.blit(text_controls, (600/2 - (start_rect[2]/2), 360))
+        screen.blit(text_quit, (1250/2 - (quit_rect[2]/2), 360))
         pygame.display.update()
         clock.tick(60)
 
