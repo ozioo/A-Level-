@@ -172,6 +172,19 @@ all_sprites_list.add(radar)
 all_sprites_list.add(cursor)
 
 # -------- Main Program Loop -----------
+black=(0,0,0)
+end_it=False
+while (end_it==False):
+    screen.fill(black)
+    myfont=pygame.font.SysFont("NBP Readout", 40)
+    nlabel=myfont.render("Welcome ", 1, (255, 0, 0))
+    for event in pygame.event.get():
+        if event.type==MOUSEBUTTONDOWN:
+            end_it=True
+    screen.blit(nlabel,(200,200))
+    pygame.display.flip()
+
+
 while not done:
     # --- Main event loop
     for event in pygame.event.get():
