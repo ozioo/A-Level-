@@ -111,9 +111,12 @@ def text_format(message, textFont, textSize, textColor):
  
     return newText
 
+
+
 def main_menu():
  
     menu=True
+    controls=False
     selected="start"
  
     while menu:
@@ -131,6 +134,9 @@ def main_menu():
                 if event.key==pygame.K_RETURN:
                     if selected=="start":
                         menu = False
+                    if selected=="Controls":
+                        menu = False
+                        controls=True
                     if selected=="quit":
                         pygame.quit()
                         quit()
@@ -161,8 +167,54 @@ def main_menu():
         screen.blit(text_controls, (600/2 - (start_rect[2]/2), 360))
         screen.blit(text_quit, (1250/2 - (quit_rect[2]/2), 360))
         pygame.display.update()
-        clock.tick(60)
+        clock.tick(60) 
+    
+    while controls:
+        for event in pygame.event.get():
+            if event.type==pygame.QUIT:
+                pygame.quit()
+                quit()
+            ##if event.type==pygame.KEYDOWN:
+            #    if event.key==pygame.K_UP:
+            #        selected="start"
+             #   elif event.key==pygame.K_RIGHT:
+              #      selected="quit"
+             #   elif event.key==pygame.K_LEFT:
+                #    selected="Controls"
+               # if event.key==pygame.K_RETURN:
+                 #   if selected=="start":
+                  #      menu = False
+                   # if selected=="quit":
+                    #    pygame.quit()
+                     #   quit()
+ 
+        # Main Menu UI
+        screen.fill(BLACK)
+        title=text_format("Controls", font, 50, GREEN)
+        text_tutorial1= text_format("USE THE MOUSE BUTTON TO MOVE THE CURSOR", font, 40, GREEN)
+        text_tutorial2= text_format("BRING THE CURSOR ONTOP OF THE ENEMIES, THE GREEN BLIPS", font, 40, GREEN)
+        text_tutorial3= text_format("PRESS THE ENTER KEY TO LOCK THEM", font, 40, GREEN)
+        text_tutorial4= text_format("WHEN LOCKED PRESS SPACEBAR TO SHOOT THEM DOWN", font, 40, GREEN)
+        text_tutorial5= text_format("IF THE ENEMIES REACH YOUR BASE IT IS GAME OVER", font, 40, GREEN)
 
+
+       
+        text_tutorial1= text_tutorial1.get_rect()
+        text_tutorial2= text_tutorial2.get_rect()
+        text_tutorial3= text_tutorial3.get_rect()
+        text_tutorial4= text_tutorial4.get_rect()
+        text_tutorial5= text_tutorial5.get_rect()
+ 
+        # Main Menu Text
+        screen.blit(title, (1000/2 - (title_rect[2]/2), 80))
+        #screen.blit(title2 , (1000/2 - (title2[2]/2), 80))
+        screen.blit(text_tutorial1, (1000/2 - (text_tutorial1[2]/2), 300))
+        screen.blit(text_tutorial2, (1000/2 - (text_tutorial2[2]/2), 360))
+        screen.blit(text_tutorial3, (1000/2 - (text_tutorial3[2]/2), 420))
+        screen.blit(text_tutorial4, (1000/2 - (text_tutorial4[2]/2), 480))
+        screen.blit(text_tutorial5, (1000/2 - (text_tutorial5[2]/2), 540))
+        pygame.display.update()
+        clock.tick(60)
 
 def Enemy_Spawn(number):
     locations=[]
@@ -247,7 +299,8 @@ all_sprites_list.add(cursor)
 #            end_it=True
 #    screen.blit(nlabel,(200,200))
 #    pygame.display.flip()
-main_menu()
+main_menu2()
+
 
 while not done:
     # --- Main event loop
