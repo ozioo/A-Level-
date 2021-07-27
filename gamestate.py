@@ -20,6 +20,7 @@ font = "NbpReadout-RBVA.ttf"
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 GREEN = (0, 255, 0)
+BLUE=(0,0,255)
 RED = (255, 0, 0)
 (x,y) = (800,800)   
 deg = 0            
@@ -160,6 +161,13 @@ def main_menu():
         else:
             text_quit = text_format("QUIT", font, 40, GREEN)
  
+        text_tutorial1= text_format("USE THE MOUSE BUTTON TO MOVE THE CURSOR", font, 23, GREEN)
+        text_tutorial2= text_format("BRING THE CURSOR ONTOP OF THE ENEMIES, THE GREEN BLIPS", font, 23, GREEN)
+        text_tutorial3= text_format("PRESS THE ENTER KEY TO LOCK THEM", font, 23, GREEN)
+        text_tutorial4= text_format("WHEN LOCKED PRESS SPACEBAR TO SHOOT THEM DOWN", font, 23, GREEN)
+        text_tutorial5= text_format("IF THE ENEMIES REACH YOUR BASE IT IS GAME OVER", font, 23, GREEN)
+        text_tutorial6= text_format("DO NOT SHOOT THE FRIENDLIES", font, 23, BLUE)
+        
         title_rect=title.get_rect()
         start_rect=text_start.get_rect()
         quit_rect=text_quit.get_rect()
@@ -193,33 +201,27 @@ def main_menu():
  
         # Main Menu UI
         screen.fill(BLACK)
+        
         title=text_format("Controls", font, 50, GREEN)
-        text_tutorial1= text_format("USE THE MOUSE BUTTON TO MOVE THE CURSOR", font, 40, GREEN)
-        text_tutorial2= text_format("BRING THE CURSOR ONTOP OF THE ENEMIES, THE GREEN BLIPS", font, 40, GREEN)
-        text_tutorial3= text_format("PRESS THE ENTER KEY TO LOCK THEM", font, 40, GREEN)
-        text_tutorial4= text_format("WHEN LOCKED PRESS SPACEBAR TO SHOOT THEM DOWN", font, 40, GREEN)
-        text_tutorial5= text_format("IF THE ENEMIES REACH YOUR BASE IT IS GAME OVER", font, 40, GREEN)
+        text_quit = text_format("USE THE MOUSE BUTTON TO MOVE THE CURSOR", font, 20, GREEN)
+
+        
+
 
 
        
-        text_tutorial1= text_tutorial1.get_rect()
-        
-        text_tutorial2= text_tutorial2.get_rect()
-        
-        text_tutorial3= text_tutorial3.get_rect()
-        
-        text_tutorial4= text_tutorial4.get_rect()
-        
-        text_tutorial5= text_tutorial5.get_rect()
+
  
         # Main Menu Text
-        screen.blit(title, (1000/2 - (title_rect[2]/2), 80))
+        screen.blit(title, (1000/2 - (title_rect[2]/2), 160))
+        
         #screen.blit(title2 , (1000/2 - (title2[2]/2), 80))
-        screen.blit(text_tutorial1, (1000/2 - (text_tutorial1[2]/2), 300))
-        screen.blit(text_tutorial2, (1000/2 - (text_tutorial2[2]/2), 360))
-        screen.blit(text_tutorial3, (1000/2 - (text_tutorial3[2]/2), 420))
-        screen.blit(text_tutorial4, (1000/2 - (text_tutorial4[2]/2), 480))
-        screen.blit(text_tutorial5, (1000/2 - (text_tutorial5[2]/2), 540))
+        screen.blit(text_tutorial1, (1000/2 - (480), 300))
+        screen.blit(text_tutorial2, (1000/2 - (480), 360))
+        screen.blit(text_tutorial3, (1000/2 - (480), 420))
+        screen.blit(text_tutorial4, (1000/2 - (480), 480))
+        screen.blit(text_tutorial5, (1000/2 - (480), 540))
+        screen.blit(text_tutorial6, (1000/2 - (480), 600))
         pygame.display.update()
         clock.tick(60)
 
