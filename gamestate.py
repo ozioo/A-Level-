@@ -64,9 +64,12 @@ class Enemy(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.y = y_pos
         self.rect.x = x_pos
+
     def change_state(self, image):
+        #print ('test')
         self.image = image
         self.mask = pygame.mask.from_surface(self.image)
+
     def update(self):
         self.rect.x += self.x_d
         self.rect.y += self.y_d
@@ -200,9 +203,13 @@ def main_menu():
 
        
         text_tutorial1= text_tutorial1.get_rect()
+        
         text_tutorial2= text_tutorial2.get_rect()
+        
         text_tutorial3= text_tutorial3.get_rect()
+        
         text_tutorial4= text_tutorial4.get_rect()
+        
         text_tutorial5= text_tutorial5.get_rect()
  
         # Main Menu Text
@@ -299,7 +306,7 @@ all_sprites_list.add(cursor)
 #            end_it=True
 #    screen.blit(nlabel,(200,200))
 #    pygame.display.flip()
-main_menu2()
+main_menu()
 
 
 while not done:
@@ -337,9 +344,9 @@ while not done:
         
 
 
-    for enemy in enemy_list:
-        if pygame.sprite.collide_mask(enemy, radar):
-            exit()         
+    for e in enemy_list:
+        if pygame.sprite.collide_mask(e, radar):
+            e.change_state(LOCK) 
 
     
 
