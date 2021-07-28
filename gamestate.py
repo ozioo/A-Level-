@@ -25,10 +25,13 @@ RED = (255, 0, 0)
 (x,y) = (800,800)   
 deg = 0            
 enemy_count= 0 
+game_end= False
 pygame.init()       
 pygame.display.set_mode((1000, 1000), 0, 32) 
 screen = pygame.display.get_surface()
 pygame.init()
+
+score= 0
 
 all_sprites_list = pygame.sprite.Group()
 enemy_list = pygame.sprite.Group()
@@ -48,7 +51,6 @@ class Cursor(pygame.sprite.Sprite):
         self.change_x = 0
         self.change_y = 0
         self.image=image
-
 
 
 class Enemy(pygame.sprite.Sprite):
@@ -75,9 +77,12 @@ class Enemy(pygame.sprite.Sprite):
         self.rect.x += self.x_d
         self.rect.y += self.y_d
 
-
+class Friendly(Enemy):
+    pass
     
-
+class Base(pygame.sprite.Sprite):
+    def __init__(self):
+        super().__init__()
 
 class Line(pygame.sprite.Sprite):
     def __init__(self, x, y):
@@ -98,6 +103,7 @@ class Line(pygame.sprite.Sprite):
         pygame.draw.aaline(self.image, (0, int(255/(1+f)), 0), (int(x/2), int(y/2)), (dx, dy),5)
         self.mask = pygame.mask.from_surface(self.image)
 def MAP():
+    
     pygame.draw.circle(screen, (102, 255, 102), (int(x/2), int(y/2)), int(x/2), 1)
     pygame.draw.circle(screen, (102, 255, 102), (int(x/2), int(y/2)), int(x/4), 1)
     pygame.draw.line(screen, (76, 82, 76), (250, 190), (200, 55))
@@ -329,7 +335,18 @@ while not done:
                 cursor.rect.y += 20
  
     # --- Game logic should go here
-    MAP()
+    #MAP()
+    if game_end == False:
+        pygame.draw.circle(screen, (102, 255, 102), (int(x/2), int(y/2)), int(x/2), 1)
+        pygame.draw.circle(screen, (102, 255, 102), (int(x/2), int(y/2)), int(x/4), 1)
+        pygame.draw.line(screen, (76, 82, 76), (250, 190), (200, 55))
+        pygame.draw.line(screen, (76, 82, 76), (300, 200), (250, 190))
+        pygame.draw.line(screen, (76, 82, 76), (350, 300), (300, 200))
+        pygame.draw.line(screen, (76, 82, 76), (350, 300), (785, 300))
+        pygame.draw.line(screen, (76, 82, 76), (340, 360), (0, 400))
+        pygame.draw.line(screen, (76, 82, 76), (350, 300), (300, 600))
+        pygame.draw.line(screen, (76, 82, 76), (300, 600), (350, 675))
+        pygame.draw.line(screen, (76, 82, 76), (370, 796), (350, 675))
 
     current_time= pygame.time.get_ticks()
         #pygame.draw.line(screen, (0, 200, 0), (int(x/2), 0), (int(x/2), y))
@@ -348,19 +365,25 @@ while not done:
 
     for e in enemy_list:
         if pygame.sprite.collide_mask(e, radar):
-            e.change_state(LOCK) 
+            e.change_state(LOCK)
+            score =+ 10
+            game_end = True 
 
     
 
     all_sprites_list.update()
     pygame.display.update()     
     clock.tick(60)        
-    screen.fill((0, 0, 0, 0))    
+    screen.fill((0, 0, 0, 0))
+
+
     # --- Screen-clearing code goes here
  
     # Here, we clear the screen to white. Don't put other drawing commands
     # above this, or they will be erased with this command.
     all_sprites_list.draw(screen)
+    if game_end == True:
+        screen.fill((102, 255, 102, 0))
     # If you want a background image, replace this clear with blit'ing the
     # background image.
 
@@ -369,6 +392,7 @@ while not done:
  
     # --- Go ahead and update the screen with what we've drawn.
     pygame.display.flip()
+    
  
     # --- Limit to 60 frames per second
 
