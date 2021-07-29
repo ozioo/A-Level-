@@ -172,7 +172,7 @@ def main_menu():
         text_tutorial4= text_format("WHEN LOCKED PRESS SPACEBAR TO SHOOT THEM DOWN", font, 23, GREEN)
         text_tutorial5= text_format("IF THE ENEMIES REACH YOUR BASE IT IS GAME OVER", font, 23, GREEN)
         text_tutorial6= text_format("DO NOT SHOOT THE FRIENDLIES", font, 23, BLUE)
-        
+        text_back= text_format("Back", font, 35, GREEN)
         title_rect=title.get_rect()
         start_rect=text_start.get_rect()
         quit_rect=text_quit.get_rect()
@@ -196,12 +196,16 @@ def main_menu():
                 if event.key==pygame.K_RETURN:
                     if selected=="back":
                         main_menu()
+                        controls = False
                         
 
 
         # Main Menu UI
         screen.fill(BLACK)
-        
+        if selected=="back":
+            text_back=text_format("Back", font, 40, WHITE)
+        else:
+            text_back = text_format("Back", font, 40, GREEN)
         title=text_format("Controls", font, 50, GREEN)
         text_quit = text_format("USE THE MOUSE BUTTON TO MOVE THE CURSOR", font, 20, GREEN)
 
@@ -213,6 +217,7 @@ def main_menu():
 
  
         # Main Menu Text
+        screen.blit(text_back, (1000/2 - (title_rect[2]/2), 80))
         screen.blit(title, (1000/2 - (title_rect[2]/2), 160))
         
         #screen.blit(title2 , (1000/2 - (title2[2]/2), 80))
