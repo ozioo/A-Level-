@@ -31,6 +31,8 @@ pygame.display.set_mode((1000, 1000), 0, 32)
 screen = pygame.display.get_surface()
 pygame.init()
 
+
+
 score= 0
 
 all_sprites_list = pygame.sprite.Group()
@@ -66,6 +68,7 @@ class Enemy(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.y = y_pos
         self.rect.x = x_pos
+        self.detected = False
 
     def change_state(self, image):
         #print ('test')
@@ -236,42 +239,42 @@ def Enemy_Spawn(number):
     locations = random.sample(range(8),number)
     for i in range(number):
         if locations[i]==1:
-            enemy=Enemy(UNLOCK,400,100,0,1)
+            enemy=Enemy(INVIS,400,100,0,1)
             all_sprites_list.add(enemy)
             enemy_list.add(enemy)
             enemy_count =+ 1
         elif locations[i] == 2:
-            enemy=Enemy(UNLOCK,150,100,1,1)
+            enemy=Enemy(INVIS,150,100,1,1)
             all_sprites_list.add(enemy)
             enemy_list.add(enemy)
             enemy_count =+ 1
         elif locations[i] == 3:
-            enemy=Enemy(UNLOCK,100,400,1,0)
+            enemy=Enemy(INVIS,100,400,1,0)
             all_sprites_list.add(enemy)
             enemy_list.add(enemy)
             enemy_count =+ 1
         elif locations[i] == 4:
-            enemy=Enemy(UNLOCK,150,600,1,-1)
+            enemy=Enemy(INVIS,150,600,1,-1)
             all_sprites_list.add(enemy)
             enemy_list.add(enemy)
             enemy_count =+ 1
         elif locations[i] == 5:
-            enemy=Enemy(UNLOCK,400,700,0,-1)
+            enemy=Enemy(INVIS,400,700,0,-1)
             all_sprites_list.add(enemy)
             enemy_list.add(enemy)
             enemy_count =+ 1
         elif locations[i] == 6:
-            enemy=Enemy(UNLOCK,600,600,-1,-1)
+            enemy=Enemy(INVIS,600,600,-1,-1)
             all_sprites_list.add(enemy)
             enemy_count =+ 1
             enemy_list.add(enemy)
         elif locations[i] == 7:
-            enemy=Enemy(UNLOCK,700,400,-1,0)
+            enemy=Enemy(INVIS,700,400,-1,0)
             all_sprites_list.add(enemy)
             enemy_list.add(enemy)
             enemy_count =+ 1
         elif locations[i] == 8:
-            enemy=Enemy(UNLOCK,650,150,-1,1)
+            enemy=Enemy(INVIS,650,150,-1,1)
             all_sprites_list.add(enemy)
             enemy_list.add(enemy)
             enemy_count =+ 1
@@ -363,10 +366,14 @@ while not done:
 
 
     for e in enemy_list:
+        if (pygame.sprite.collide_mask(e, radar)) and (e.detected == False) :
+            e.change_state(UNLOCK)
+            score =+ 10
+            e.detected= True
+    for e in enemy_list:
         if pygame.sprite.collide_mask(e, cursor):
             e.change_state(LOCK)
             score =+ 10
-            #game_end = True 
 
     
 
