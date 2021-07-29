@@ -117,13 +117,26 @@ def MAP():
     pygame.draw.line(screen, (76, 82, 76), (300, 600), (350, 675))
     pygame.draw.line(screen, (76, 82, 76), (370, 796), (350, 675))
 
+
+
+
 def text_format(message, textFont, textSize, textColor):
     newFont=pygame.font.Font(textFont, textSize)
     newText=newFont.render(message, 0, textColor)
  
     return newText
 
-
+def loadscore():
+    global highscore
+    dir = path.dirname(__file__)
+    try:
+        #try to read the file
+        with open(path.join(self.dir, HS_FILE), 'r+') as f:
+            highscore = int(f.read())
+    except:
+        #create the file
+        with open(path.join(self.dir, HS_FILE), 'w'):
+            highscore = 0
 
 def main_menu():
  
@@ -175,7 +188,9 @@ def main_menu():
         text_tutorial4= text_format("WHEN LOCKED PRESS SPACEBAR TO SHOOT THEM DOWN", font, 23, GREEN)
         text_tutorial5= text_format("IF THE ENEMIES REACH YOUR BASE IT IS GAME OVER", font, 23, GREEN)
         text_tutorial6= text_format("DO NOT SHOOT THE FRIENDLIES", font, 23, BLUE)
-        text_back= text_format("Back", font, 35, GREEN)
+        #text_back= text_format("Back", font, 35, GREEN)
+        #text_score= text_format("Score: "+ str(highscore), font, 35, GREEN)
+        
         title_rect=title.get_rect()
         start_rect=text_start.get_rect()
         quit_rect=text_quit.get_rect()
@@ -185,6 +200,7 @@ def main_menu():
         screen.blit(text_start, (1000/2 - (start_rect[2]/2), 300))
         screen.blit(text_controls, (600/2 - (start_rect[2]/2), 360))
         screen.blit(text_quit, (1250/2 - (quit_rect[2]/2), 360))
+        #screen.blit(text_score, (1000 , 80))
         pygame.display.update()
         clock.tick(60) 
     
@@ -279,7 +295,21 @@ def Enemy_Spawn(number):
             enemy_list.add(enemy)
             enemy_count =+ 1
     locations=[]
-          
+
+def detection():
+    for e in enemy_list:
+        if (pygame.sprite.collide_mask(e, radar)) and (e.detected == False) :
+            e.change_state(UNLOCK)
+            score =+ 10
+            e.detected= True
+    for e in enemy_list:
+        if pygame.sprite.collide_mask(e, cursor):
+            e.change_state(LOCK)
+            score =+ 10    
+
+
+
+
 current_time=0
 # Set the width and height of the screen [width, height]
 
@@ -364,16 +394,7 @@ while not done:
         
         
 
-
-    for e in enemy_list:
-        if (pygame.sprite.collide_mask(e, radar)) and (e.detected == False) :
-            e.change_state(UNLOCK)
-            score =+ 10
-            e.detected= True
-    for e in enemy_list:
-        if pygame.sprite.collide_mask(e, cursor):
-            e.change_state(LOCK)
-            score =+ 10
+    detection()
 
     
 
