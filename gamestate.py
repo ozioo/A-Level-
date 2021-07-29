@@ -190,20 +190,15 @@ def main_menu():
             if event.type==pygame.QUIT:
                 pygame.quit()
                 quit()
-            ##if event.type==pygame.KEYDOWN:
-            #    if event.key==pygame.K_UP:
-            #        selected="start"
-             #   elif event.key==pygame.K_RIGHT:
-              #      selected="quit"
-             #   elif event.key==pygame.K_LEFT:
-                #    selected="Controls"
-               # if event.key==pygame.K_RETURN:
-                 #   if selected=="start":
-                  #      menu = False
-                   # if selected=="quit":
-                    #    pygame.quit()
-                     #   quit()
- 
+            if event.type==pygame.KEYDOWN:
+                if event.key==pygame.K_UP:
+                    selected="back"
+                if event.key==pygame.K_RETURN:
+                    if selected=="back":
+                        main_menu()
+                        
+
+
         # Main Menu UI
         screen.fill(BLACK)
         
