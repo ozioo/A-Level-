@@ -46,11 +46,10 @@ class Cursor(pygame.sprite.Sprite):
         # Set height, width
         self.image = pygame.Surface([40, 40])
         self.rect = self.image.get_rect()
-        self.rect.y = y
-        self.rect.x = x
-        self.change_x = 0
-        self.change_y = 0
+        self.rect = self.image.get_rect(center = (x, y))
         self.image=image
+    def update(self):
+        self.rect.center = pygame.mouse.get_pos()
 
 
 class Enemy(pygame.sprite.Sprite):
@@ -367,7 +366,7 @@ while not done:
         if pygame.sprite.collide_mask(e, radar):
             e.change_state(LOCK)
             score =+ 10
-            game_end = True 
+            #game_end = True 
 
     
 
