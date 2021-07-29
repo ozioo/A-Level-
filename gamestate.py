@@ -363,7 +363,7 @@ while not done:
 
 
     for e in enemy_list:
-        if pygame.sprite.collide_mask(e, radar):
+        if pygame.sprite.collide_mask(e, cursor):
             e.change_state(LOCK)
             score =+ 10
             #game_end = True 
