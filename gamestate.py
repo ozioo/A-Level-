@@ -1,3 +1,4 @@
+import os
 import sys
 from typing import Tuple
 import pygame
@@ -447,8 +448,7 @@ def detection():
 def game_loop():
     
 
-    for e in enemy_list:
-        e.kill()
+
 
     radar =Line(400,400)
 
@@ -587,10 +587,9 @@ def retry_menu():
                     selected="quit"
                 if event.key==pygame.K_RETURN:
                     if selected=="return":
+                        
                         retry=False
-                        global game_end
-                        game_end=True
-                        main_menu()
+                        
 
                     if selected=="quit":
                         pygame.quit()
@@ -621,7 +620,23 @@ def retry_menu():
 
         pygame.display.flip()
 
+def main():
+    playcount = 0
+    while not done:
+        if(playcount > 1):
+            for e in enemy_list:
+                e.kill()
+            for e in radar_list:
+                e.kill()
 
+
+        main_menu()
+
+        game_loop()
+
+        retry_menu()
+
+        playcount = playcount+1
 
 
 
@@ -661,13 +676,13 @@ done = False
 #
 #    screen.blit(nlabel,(200,200))
 #    pygame.display.flip()
-main_menu()
 
-game_loop()
 
-retry_menu()
 
-    
+
+
+
+main()
  
     # --- Limit to 60 frames per second
 
