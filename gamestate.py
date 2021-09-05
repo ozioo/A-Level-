@@ -498,6 +498,17 @@ def game_loop():
 
                 elif event.key == pygame.K_DOWN:
                     cursor.rect.y += 20
+                elif event.key == pygame.K_RETURN:
+                    for e in enemy_list:
+                        if pygame.sprite.collide_mask(e, cursor):
+                            
+                            e.change_state(LOCK)
+
+                            global score
+
+                            score = score + 10
+
+                            print(score)
     
         # --- Game logic should go here
         #MAP()
@@ -541,16 +552,7 @@ def game_loop():
                 
                 
                 e.detected= True
-        for e in enemy_list:
-            if pygame.sprite.collide_mask(e, cursor):
-                
-                e.change_state(LOCK)
 
-                global score
-
-                score = score + 10
-
-                print(score)
                 
         for e in enemy_list:
 
