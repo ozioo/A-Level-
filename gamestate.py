@@ -504,11 +504,20 @@ def game_loop():
                             
                             e.change_state(LOCK)
 
+                            
+                elif event.key == pygame.K_SPACE:
+
+                    for e in enemy_list:
+
+                        if e.image == LOCK:
+                            e.kill()
+
                             global score
 
                             score = score + 10
 
                             print(score)
+
     
         # --- Game logic should go here
         #MAP()
