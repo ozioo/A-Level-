@@ -7,6 +7,7 @@ import random
 from time import sleep
 from pygame.locals import *
 
+## simplifiying image declerations so code doesnt become swamped
 
 UNLOCK = pygame.image.load('UNLOCK.png')
 
@@ -55,6 +56,7 @@ screen = pygame.display.get_surface()
 pygame.init()
 
 
+## global declaration for easier access in loops
 
 global score
 
@@ -63,6 +65,8 @@ score= 10
 all_sprites_list = pygame.sprite.Group()
 
 enemy_list = pygame.sprite.Group()
+
+radar_list = pygame.sprite.Group()
 
 class Cursor(pygame.sprite.Sprite):
 
@@ -118,7 +122,6 @@ class Enemy(pygame.sprite.Sprite):
 
         self.lock_time = 0
 
-        # Make our top-left corner the passed-in location.
         self.rect = self.image.get_rect()
 
         self.rect.y = y_pos
@@ -127,6 +130,8 @@ class Enemy(pygame.sprite.Sprite):
 
         self.detected = False
 
+        # function that allows the enemy to switch between detection modes
+        
     def change_state(self, image):
         #print ('test')
         self.image = image
@@ -142,7 +147,7 @@ class Friendly(Enemy):
     pass
     
 
-
+#the line is the radar cursour that is spinning
 class Line(pygame.sprite.Sprite):
     def __init__(self, x, y):
         super().__init__()
@@ -159,6 +164,8 @@ class Line(pygame.sprite.Sprite):
 
         if self.angle >=360:
             deg=0
+#
+#mathematical equations that allow the lines to spin a circle whilist varying its length
 
         dx = x/2 + x/2 * math.cos(math.radians(self.angle-.1))
 
@@ -170,6 +177,7 @@ class Line(pygame.sprite.Sprite):
         pygame.draw.aaline(self.image, (0, int(255/(1+f)), 0), (int(x/2), int(y/2)), (dx, dy),5)
 
         self.mask = pygame.mask.from_surface(self.image)
+        
 def MAP():
     
     pygame.draw.circle(screen, (102, 255, 102), (int(x/2), int(y/2)), int(x/2), 1)
@@ -185,6 +193,7 @@ def MAP():
 
 
 
+# a better alterantive to pygame.font that makes it easier in the long run to print text.
 
 def text_format(message, textFont, textSize, textColor):
 
@@ -193,7 +202,7 @@ def text_format(message, textFont, textSize, textColor):
     newText=newFont.render(message, 0, textColor)
  
     return newText
-
+# code that I hoped would create a local highscore file but did not work
 #def loadscore():
 #    global highscore
 #    dir = path.dirname(__file__)
@@ -262,7 +271,7 @@ def main_menu():
         text_tutorial5= text_format("IF THE ENEMIES REACH YOUR BASE IT IS GAME OVER", font, 23, GREEN)
 
         text_tutorial6= text_format("DO NOT SHOOT THE FRIENDLIES", font, 23, BLUE)
-        
+        # the reason why there is so many stacked text declarations is because of an error I faced being solved by doing this
 
         
 
@@ -292,6 +301,8 @@ def main_menu():
         #screen.blit(text_score, (1000 , 80))
         pygame.display.update()
         clock.tick(60) 
+    
+    # controls section of the menu
     
     while controls:
         for event in pygame.event.get():
@@ -357,6 +368,9 @@ def main_menu():
         clock.tick(60)
 
 def Enemy_Spawn(number):
+    
+    # 0 and 1 correspons to negative or positive changes in the x or y axis of movement of the sprites. They spawn at predetermined positions as an excessive amount of algebra would be required to create concentric cirles of spawn positions.
+    
     locations=[]
 
     global enemy_count
@@ -451,6 +465,8 @@ def game_loop():
 
 
     radar =Line(400,400)
+
+    radar_list.add(radar)
 
     cursor =Cursor(CURSOR,372,375)
 
@@ -566,6 +582,7 @@ def game_loop():
         # --- Drawing code should go here
     
         # --- Go ahead and update the screen with what we've drawn.
+        
         pygame.display.flip()
             
                   
@@ -659,7 +676,9 @@ done = False
 
 # -------- Main Program Loop -----------
 ##black=(0,0,0)
+##
 ##end_it=False
+##
 ##while (end_it==False):
 
 ##    screen.fill(black)
