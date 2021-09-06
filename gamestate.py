@@ -371,77 +371,90 @@ def Enemy_Spawn(number):
     
     # 0 and 1 correspons to negative or positive changes in the x or y axis of movement of the sprites. They spawn at predetermined positions as an excessive amount of algebra would be required to create concentric cirles of spawn positions.
     
-    locations=[]
+    
 
     global enemy_count
 
-    locations = random.sample(range(8),number)
+    
 
-    for i in range(number):
+    
 
-        if locations[i]==1:
+    #for i in range(number):
+    
+    
+    
 
-            enemy=Enemy(INVIS,400,100,0,1)
-            all_sprites_list.add(enemy)
-            enemy_list.add(enemy)
+    if number==1:
 
-            enemy_count =+ 1
+        enemy=Enemy(INVIS,400,100,0,1)
+        all_sprites_list.add(enemy)
+        enemy_list.add(enemy)
 
-        elif locations[i] == 2:
-            enemy=Enemy(INVIS,150,100,1,1)
-            all_sprites_list.add(enemy)
-            enemy_list.add(enemy)
+        enemy_count =+ 1
+        
 
-            enemy_count =+ 1
+    elif number == 2:
+        enemy=Enemy(INVIS,150,100,1,1)
+        all_sprites_list.add(enemy)
+        enemy_list.add(enemy)
 
-        elif locations[i] == 3:
+        enemy_count =+ 1
+        
 
-            enemy=Enemy(INVIS,100,400,1,0)
-            all_sprites_list.add(enemy)
-            enemy_list.add(enemy)
+    elif number == 3:
 
-            enemy_count =+ 1
+        enemy=Enemy(INVIS,100,400,1,0)
+        all_sprites_list.add(enemy)
+        enemy_list.add(enemy)
 
-        elif locations[i] == 4:
+        enemy_count =+ 1
+        
 
-            enemy=Enemy(INVIS,150,600,1,-1)
-            all_sprites_list.add(enemy)
-            enemy_list.add(enemy)
+    elif number == 4:
 
-            enemy_count =+ 1
+        enemy=Enemy(INVIS,150,600,1,-1)
+        all_sprites_list.add(enemy)
+        enemy_list.add(enemy)
 
-        elif locations[i] == 5:
+        enemy_count =+ 1
+        
 
-            enemy=Enemy(INVIS,400,700,0,-1)
-            all_sprites_list.add(enemy)
-            enemy_list.add(enemy)
+    elif number == 5:
 
-            enemy_count =+ 1
+        enemy=Enemy(INVIS,400,700,0,-1)
+        all_sprites_list.add(enemy)
+        enemy_list.add(enemy)
 
-        elif locations[i] == 6:
-            enemy=Enemy(INVIS,600,600,-1,-1)
-            all_sprites_list.add(enemy)
-            enemy_list.add(enemy)
-            
-            enemy_count =+ 1
-            
-        elif locations[i] == 7:
+        enemy_count =+ 1
+        
 
-            enemy=Enemy(INVIS,700,400,-1,0)
-            all_sprites_list.add(enemy)
-            enemy_list.add(enemy)
+    elif number == 6:
+        enemy=Enemy(INVIS,600,600,-1,-1)
+        all_sprites_list.add(enemy)
+        enemy_list.add(enemy)
+        
+        enemy_count =+ 1
+        
+        
+    elif number == 7:
 
-            enemy_count =+ 1
+        enemy=Enemy(INVIS,700,400,-1,0)
+        all_sprites_list.add(enemy)
+        enemy_list.add(enemy)
 
-        elif locations[i] == 8:
+        enemy_count =+ 1
+        
 
-            enemy=Enemy(INVIS,650,150,-1,1)
-            all_sprites_list.add(enemy)
-            enemy_list.add(enemy)
+    elif number == 8:
 
-            enemy_count =+ 1
+        enemy=Enemy(INVIS,650,150,-1,1)
+        all_sprites_list.add(enemy)
+        enemy_list.add(enemy)
 
-    locations=[]
+        enemy_count =+ 1
+        
+
+    
 
 def detection():
     for e in enemy_list:
@@ -460,9 +473,14 @@ def detection():
             game_end = False
 
 def game_loop():
-    
+      
 
-
+    global clock
+    clock= pygame.time.Clock()
+    global dt
+    dt=1
+    global timer 
+    timer=30
 
     radar =Line(400,400)
 
@@ -472,13 +490,15 @@ def game_loop():
 
     base = Base(BASE,400,400)
 
-    Enemy_Spawn(5)
+    
 
     all_sprites_list.add(radar)
 
     all_sprites_list.add(cursor)
 
     all_sprites_list.add(base)
+
+    
 
     game_end=True
     while game_end:
@@ -516,7 +536,8 @@ def game_loop():
 
                             score = score + 10
 
-                            print(score)
+                            
+                
 
     
         # --- Game logic should go here
@@ -533,7 +554,12 @@ def game_loop():
             pygame.draw.line(screen, (76, 82, 76), (300, 600), (350, 675))
             pygame.draw.line(screen, (76, 82, 76), (370, 796), (350, 675))
 
-        current_time= pygame.time.get_ticks()
+        timer-=dt
+
+        if timer <= 0:
+            Enemy_Spawn(random.randrange(1,9))
+
+            timer=60
             #pygame.draw.line(screen, (0, 200, 0), (int(x/2), 0), (int(x/2), y))
         #for enemy in enemy_list:
 
@@ -575,8 +601,11 @@ def game_loop():
         all_sprites_list.update()
 
         pygame.display.update() 
-
-        clock.tick(60)     
+        
+        #OPTIMISATION ISSUE
+        #dt=clock.tick(60)/600    
+        clock.tick(60)
+         
 
         screen.fill((0, 0, 0, 0))
 
@@ -595,6 +624,10 @@ def game_loop():
         # --- Go ahead and update the screen with what we've drawn.
         
         pygame.display.flip()
+        
+    scores.append(score)
+    score=0
+    
             
                   
 def retry_menu():
@@ -622,9 +655,18 @@ def retry_menu():
                     if selected=="quit":
                         pygame.quit()
                         quit()
-
-        text_score= text_format("You Scored: " + str(score), font, 23, GREEN)
+        max_score=scores[0]
+        if playcount>=1:
+            for x in range((playcount+1)):
+                if scores[x] > max_score:
+                    max_score= scores[x]
+            
+        text_score= text_format("You Scored: " + str(scores[playcount]), font, 23, GREEN)
+        
+        text_high_score= text_format("Your High Score Is: " + str(max_score), font, 23, GREEN)
+        
         text_return= text_format("Return to Main Menu", font, 40, GREEN)
+        
         text_quit= text_format("Quit", font, 40, GREEN)
 
         if selected == "return":
@@ -636,6 +678,8 @@ def retry_menu():
         
         screen.fill((0, 0, 0, 0))
 
+        screen.blit(text_high_score, (1000/2 - (480), 250))
+        
         screen.blit(text_score, (1000/2 - (480), 300))
 
         screen.blit(text_message, (1000/2 - (480), 50))
@@ -647,9 +691,14 @@ def retry_menu():
         screen.blit(text_quit, (1000/2 - (480), 400))
 
         pygame.display.flip()
+        
 
 def main():
+    global playcount
+    global scores
     playcount = 0
+    scores=[]*100
+
     while not done:
         if(playcount > 1):
             for e in enemy_list:
@@ -657,14 +706,16 @@ def main():
             for e in radar_list:
                 e.kill()
 
-
+        score=0
+        
         main_menu()
 
         game_loop()
-
+        
         retry_menu()
 
         playcount = playcount+1
+        
 
 
 
